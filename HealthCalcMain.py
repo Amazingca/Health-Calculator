@@ -55,7 +55,7 @@ class MainWindow(QMainWindow):
         self.layout.addLayout(self.top_button_layout)
 
         # Set Up Header Greeting
-        self.header = QLabel("<b>Welcome " + self.profile_name + "<b>") # Insert name from .csv here
+        self.header = QLabel("<b>Welcome, " + self.profile_name + "<b>") # Insert name from .csv here
         self.layout.addWidget(self.header, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
 
         # Set up date + current weight + goal weight fields
@@ -106,7 +106,7 @@ class MainWindow(QMainWindow):
         self.vitamin_B12 = QPlainTextEdit("Vitamin B12: ")
         self.vitamin_B12.setReadOnly(True)
         self.vitamin_riboflavin = QPlainTextEdit("Riboflavin: ")
-        self.vitamin_A.setReadOnly(True)
+        self.vitamin_riboflavin.setReadOnly(True)
         self.vitamin_folate = QPlainTextEdit("Folate: ")
         self.vitamin_folate.setReadOnly(True)
         self.vitamin_niacin = QPlainTextEdit("Niacin: ")
