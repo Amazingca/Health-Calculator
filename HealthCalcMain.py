@@ -16,17 +16,14 @@ class MainWindow(QMainWindow):
     def __init__(self, profile_name):
         super().__init__()
 
-        # Populate Primary Data Fields 
+        # Populate Primary Data Fields (imperial -- metric is used within formulas, and these conversions take place within functions)
         self.profile_name = profile_name
         self.current_weight = 0
-        self.current_weight_kg = 0
         self.goal_weight = 0
-        self.goal_weight_kg = 0
         self.age = 0
         self.activity_level = 0
         self.activity_level_multiplier = 0
         self.height_ = 0
-        self.height_cm = 0
         self.gender = None
         self.bmr = 0
         self.today_date = datetime.date.today().strftime("%m/%d/%Y")
@@ -73,13 +70,13 @@ class MainWindow(QMainWindow):
         self.macro_layout = QGridLayout()
         self.macro_tdee = QPlainTextEdit("TDEE: " + str(self.calc_tdee()) + " cals")
         self.macro_tdee.setReadOnly(True)
-        self.macro_target_calories = QPlainTextEdit("Target Calories: ")
+        self.macro_target_calories = QPlainTextEdit("Target Calories: " + str(self.calc_target_cals()) + " cals")
         self.macro_target_calories.setReadOnly(True)
-        self.macro_target_protein = QPlainTextEdit("Protein: ")
+        self.macro_target_protein = QPlainTextEdit("Protein: " + str(self.calc_target_protein()) + "g")
         self.macro_target_protein.setReadOnly(True)
-        self.macro_target_fat = QPlainTextEdit("Fat: ")
+        self.macro_target_fat = QPlainTextEdit("Fat: " + str(self.calc_target_fat()) + "g")
         self.macro_target_fat.setReadOnly(True)
-        self.macro_target_carbs = QPlainTextEdit("Carbs: ")
+        self.macro_target_carbs = QPlainTextEdit("Carbs: " + str(self.calc_target_carbs()) + "g")
         self.macro_target_carbs.setReadOnly(True)
         self.macro_layout.addWidget(self.macro_tdee, 0, 0)
         self.macro_layout.addWidget(self.macro_target_calories, 0, 1)
@@ -89,35 +86,35 @@ class MainWindow(QMainWindow):
         self.layout.addLayout(self.macro_layout)
 
         self.vitamin_layout = QGridLayout()
-        self.vitamin_A = QPlainTextEdit("Vitamin A: ")
+        self.vitamin_A = QPlainTextEdit("Vitamin A: " + str(self.calc_target_vitmain_A()) + " mcg RAE")
         self.vitamin_A.setReadOnly(True)
-        self.vitamin_C = QPlainTextEdit("Vitamin C: ")
+        self.vitamin_C = QPlainTextEdit("Vitamin C: " + str(self.calc_target_vitmain_C()) + " mg")
         self.vitamin_C.setReadOnly(True)
-        self.vitamin_D = QPlainTextEdit("Vitamin D: ")
+        self.vitamin_D = QPlainTextEdit("Vitamin D: " + str(self.calc_target_vitamin_D()) + " mcg")
         self.vitamin_D.setReadOnly(True)
-        self.vitamin_B6 = QPlainTextEdit("Vitamin B6: ")
+        self.vitamin_B6 = QPlainTextEdit("Vitamin B6: " + str(self.calc_target_vitamin_B6()) + " mg")
         self.vitamin_B6.setReadOnly(True)
-        self.vitamin_E = QPlainTextEdit("Vitamin E: ")
+        self.vitamin_E = QPlainTextEdit("Vitamin E: " + str(self.calc_target_vitmain_E()) + " mg")
         self.vitamin_E.setReadOnly(True)
-        self.vitamin_K = QPlainTextEdit("Vitamin K: ")
+        self.vitamin_K = QPlainTextEdit("Vitamin K: " + str(self.calc_target_vitmain_K()) + " mcg")
         self.vitamin_K.setReadOnly(True)
-        self.vitamin_thiamin = QPlainTextEdit("Thiamin: ")
+        self.vitamin_thiamin = QPlainTextEdit("Thiamin: " + str(self.calc_target_vitamin_thiamin()) + " mg")
         self.vitamin_thiamin.setReadOnly(True)
-        self.vitamin_B12 = QPlainTextEdit("Vitamin B12: ")
+        self.vitamin_B12 = QPlainTextEdit("Vitamin B12: " + str(self.calc_target_vitmain_B12()) + " mcg")
         self.vitamin_B12.setReadOnly(True)
-        self.vitamin_riboflavin = QPlainTextEdit("Riboflavin: ")
+        self.vitamin_riboflavin = QPlainTextEdit("Riboflavin: " + str(self.calc_target_vitamin_riboflavin()) + " mg")
         self.vitamin_riboflavin.setReadOnly(True)
-        self.vitamin_folate = QPlainTextEdit("Folate: ")
+        self.vitamin_folate = QPlainTextEdit("Folate: " + str(self.calc_target_vitmain_folate()) + " mcg DFE")
         self.vitamin_folate.setReadOnly(True)
-        self.vitamin_niacin = QPlainTextEdit("Niacin: ")
+        self.vitamin_niacin = QPlainTextEdit("Niacin: " + str(self.calc_target_vitamin_niacin()) + " mg NE")
         self.vitamin_niacin.setReadOnly(True)
-        self.vitamin_choline = QPlainTextEdit("Choline: ")
+        self.vitamin_choline = QPlainTextEdit("Choline: " + str(self.calc_target_vitamin_choline()) + " mg")
         self.vitamin_choline.setReadOnly(True)
-        self.vitamin_pantothenic_acid = QPlainTextEdit("Pantothenic Acid: ")
+        self.vitamin_pantothenic_acid = QPlainTextEdit("Pantothenic Acid: " + str(self.calc_target_vitamin_pantothenic_acid()) + " mg")
         self.vitamin_pantothenic_acid.setReadOnly(True)
-        self.vitamin_biotin = QPlainTextEdit("Biotin: ")
+        self.vitamin_biotin = QPlainTextEdit("Biotin: " + str(self.calc_target_vitamin_biotin()) + " mcg")
         self.vitamin_biotin.setReadOnly(True)    
-        self.vitamin_carotenoids = QPlainTextEdit("Carotenoids: ")
+        self.vitamin_carotenoids = QPlainTextEdit("Carotenoids: " + str(self.calc_target_vitamin_carotenoids()) + " mcg RAE")
         self.vitamin_carotenoids.setReadOnly(True)
         self.vitamin_layout.addWidget(self.vitamin_A, 0, 0)
         self.vitamin_layout.addWidget(self.vitamin_C, 0, 1)
@@ -203,14 +200,13 @@ class MainWindow(QMainWindow):
                     self.gender = row[6]
                     break
 
-            self.current_weight_kg = self.current_weight * 0.45359237
-            self.goal_weight_kg = self.goal_weight * 0.45359237
-            self.height_cm = self.height_ * 2.54
+            current_weight_kg = self.current_weight * 0.45359237
+            height_cm = self.height_ * 2.54
 
             if self.gender == "m":
-                self.bmr = ((10 * self.current_weight_kg) + (6.25 * self.height_cm) - (5 * self.age) + 5)
+                self.bmr = ((10 * current_weight_kg) + (6.25 * height_cm) - (5 * self.age) + 5)
             else:
-                self.bmr = ((10 * self.current_weight_kg) + (6.25 * self.height_cm) - (5 * self.age) - 161)
+                self.bmr = ((10 * current_weight_kg) + (6.25 * height_cm) - (5 * self.age) - 161)
             
             self.activity_level_multiplier = self.generate_activity_level_multiplier()
             
@@ -234,8 +230,191 @@ class MainWindow(QMainWindow):
     def calc_tdee(self):
         return int(self.bmr * self.activity_level_multiplier)
     
+    def calc_target_cals(self):
+        if self.current_weight < self.goal_weight:
+            return self.calc_tdee() + 300
+        elif self.current_weight > self.goal_weight:
+            return self.calc_tdee() - 300
+        else:
+            return self.calc_tdee()
     
+    def calc_target_protein(self):
+        return (self.calc_tdee() * 0.25) // 4
+    
+    def calc_target_carbs(self):
+        return (self.calc_tdee() * 0.45) // 4
+
+    def calc_target_fat(self):
+        return (self.calc_tdee() * 0.25) // 9        
+
+    def calc_target_vitmain_A(self):
+        # Source: https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/
+        # Returns mcg dose
         
+        if self.age < 4: return 300
+        elif self.age < 9: return 400
+        elif self.age < 14: return 600
+        else:
+            if self.gender == "m": return 900
+            else: return 700
+
+    def calc_target_vitmain_C(self):
+        # Source: https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/
+        # Returns mg dose
+
+        if self.age < 4: return 15
+        elif self.age < 9: return 25
+        elif self.age < 14: return 45
+        elif self.age < 19:
+            if self.gender == "m": return 75
+            else: return 65
+        else:
+            if self.gender == "m": return 90
+            else: return 75
+
+    def calc_target_vitamin_D(self):
+        # Source: https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/
+        # Returns mcg dose
+
+        if self.age < 70: return 15
+        else: return 20
+
+    def calc_target_vitamin_B6(self):
+        # Source: https://ods.od.nih.gov/factsheets/VitaminB6-HealthProfessional/
+        # Returns dose in mg
+
+        if self.age < 4: return 0.5
+        elif self.age < 9: return 0.6
+        elif self.age < 14: return 1.0
+        elif self.age < 19:
+            if self.gender == "m": return 1.3
+            else: return 1.2
+        elif self.age < 51: return 1.3
+        else: 
+            if self.gender == "m": return 1.7
+            else: return 1.5
+
+    def calc_target_vitmain_E(self):
+        # Source: https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/
+        # Returns dose in mg
+
+        if self.age < 4: return 6
+        elif self.age < 9: return 7
+        elif self.age < 14: return 11
+        else: return 15
+
+    def calc_target_vitmain_K(self):
+        # Source: https://ods.od.nih.gov/factsheets/VitaminK-HealthProfessional/
+        # Returns dose in mcg
+
+        if self.age < 4: return 30
+        elif self.age < 9: return 55
+        elif self.age < 14: return 60
+        elif self.age < 19: return 75
+        else:
+            if self.gender == "m": return 120
+            else: return 90
+
+    def calc_target_vitamin_thiamin(self):
+        # Source: https://ods.od.nih.gov/factsheets/Thiamin-HealthProfessional/
+        # Returns measurement in mg
+
+        if self.age < 4: return 0.5
+        elif self.age < 9: return 0.6
+        elif self.age < 14: return 0.9
+        elif self.age < 19:
+            if self.gender == "m": return 1.2
+            else: return 1.0
+        else:
+            if self.gender == "m": return 1.2
+            else: return 1.1
+
+    def calc_target_vitmain_B12(self):
+        # Source: https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/
+        # Returns dose in mcg
+
+        if self.age < 4: return 0.9
+        elif self.age < 9: return 1.2
+        elif self.age < 14: return 1.8
+        else: return 2.4
+
+    def calc_target_vitamin_riboflavin(self):
+        # Source: https://ods.od.nih.gov/factsheets/Riboflavin-HealthProfessional/
+        # Returns dose in mg
+
+        if self.age < 4: return 0.5
+        elif self.age < 9: return 0.6
+        elif self.age < 14: return 0.9
+        elif self.age < 19:
+            if self.gender == "m": return 1.3
+            else: return 1.0
+        else:
+            if self.gender == "m": return 1.3
+            else: return 1.1
+        
+    def calc_target_vitmain_folate(self):
+        # https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/
+        # Returns dose in mcg DFE
+
+        if self.age < 4: return 150
+        elif self.age < 9: return 200
+        elif self.age < 14: return 300
+        else: return 400
+
+    def calc_target_vitamin_niacin(self):
+        # Source: https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/
+        # Returns dose in mg NE
+
+        if self.age < 4: return 6
+        elif self.age < 9: return 8
+        elif self.age < 14: return 12
+        else:
+            if self.gender == "m": return 16
+            else: return 14
+
+    def calc_target_vitamin_choline(self):
+        # Source: https://ods.od.nih.gov/factsheets/Choline-HealthProfessional/
+        # Returns dose in mg
+
+        if self.age < 4: return 200
+        elif self.age < 9: return 250
+        elif self.age < 14: return 375
+        elif self.age < 19:
+            if self.gender == "m": return 550
+            else: return 400
+        else:
+            if self.gender == "m": return 550
+            else: return 425
+            
+    def calc_target_vitamin_pantothenic_acid(self):
+        # Source: https://ods.od.nih.gov/factsheets/PantothenicAcid-HealthProfessional/
+        # Returns dose in mg
+
+        if self.age < 4: return 2
+        elif self.age < 9: return 3
+        elif self.age < 14: return 4
+        else: return 5
+
+    def calc_target_vitamin_biotin(self):
+        # Source: https://ods.od.nih.gov/factsheets/Biotin-HealthProfessional/
+        # Returns dose in mcg
+
+        if self.age < 4: return 8
+        elif self.age < 9: return 12
+        elif self.age < 14: return 20
+        elif self.age < 19: return 25
+        else: return 30
+
+    def calc_target_vitamin_carotenoids(self):
+        # Source: https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/
+        # Returns dose in mcg RAE
+
+        if self.age < 4: return 300
+        elif self.age < 9: return 400
+        elif self.age < 14: return 600
+        else:
+            if self.gender == "m": return 900
+            else: return 700
 
 if __name__ == "__main__":
 
