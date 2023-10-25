@@ -35,8 +35,8 @@ class CreateProfileWindow(QMainWindow):
         self.activity_level = QPlainTextEdit()
         self.height_label = QLabel("Height (in)")
         self.height_ = QPlainTextEdit()
-        self.gender_label = QLabel("Gender (m/f)")
-        self.gender = QPlainTextEdit()
+        self.biosex_label = QLabel("Biological Sex (m/f)")
+        self.biosex = QPlainTextEdit()
         self.info_layout = QGridLayout()
         self.info_layout.addWidget(self.profile_name_label, 0, 0)
         self.info_layout.addWidget(self.profile_name, 0, 1)
@@ -50,8 +50,8 @@ class CreateProfileWindow(QMainWindow):
         self.info_layout.addWidget(self.activity_level, 4, 1)
         self.info_layout.addWidget(self.height_label, 5, 0)
         self.info_layout.addWidget(self.height_, 5, 1)
-        self.info_layout.addWidget(self.gender_label, 6, 0)
-        self.info_layout.addWidget(self.gender, 6, 1)
+        self.info_layout.addWidget(self.biosex_label, 6, 0)
+        self.info_layout.addWidget(self.biosex, 6, 1)
         self.layout.addLayout(self.info_layout)
 
         # Set Up Buttons
