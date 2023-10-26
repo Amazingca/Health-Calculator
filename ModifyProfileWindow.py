@@ -7,7 +7,7 @@ class ModifyProfileWindow(QMainWindow):
     def __init__(self, isNew):
         super().__init__()
 
-        # Set Up Window Title, Size, and Style (Dark)
+        # Set Up Window Title (with conditional), Size, and Style (Dark)
         if isNew:
             self.setWindowTitle("Welcome - Health Calculator")
         else:
@@ -21,14 +21,14 @@ class ModifyProfileWindow(QMainWindow):
         self.setCentralWidget(self.central_widget)
         self.layout = QVBoxLayout(self.central_widget)
 
-        # Set Up Header Greeting
+        # Header grid layout, with modification conditional
         if isNew:
             self.header = QLabel("<b>Add a New Profile<b>")
         else:
             self.header = QLabel("<b>Modify Profile")
         self.layout.addWidget(self.header, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignCenter)
 
-        # Name grid layout
+        # Name grid layout, with modification conditional
         self.name_layout = QGridLayout()
         self.name_input = QLineEdit(self)
         if isNew:
@@ -38,7 +38,7 @@ class ModifyProfileWindow(QMainWindow):
         self.name_layout.addWidget(self.name_text, 0, 0, alignment=Qt.AlignmentFlag.AlignBottom)
         self.name_layout.addWidget(self.name_input, 1, 0, alignment=Qt.AlignmentFlag.AlignTop)
 
-        # Sex dropdown layout
+        # Biological sex dropdown layout, with modification conditional
         self.bioSex_layout = QGridLayout()
         self.bioSex_dropdown = QComboBox()
         self.bioSex_dropdown.addItems(['Choose', 'Male', 'Female'])
@@ -49,7 +49,7 @@ class ModifyProfileWindow(QMainWindow):
         self.bioSex_layout.addWidget(self.bioSex_text, 0, 0, alignment=Qt.AlignmentFlag.AlignBottom)
         self.bioSex_layout.addWidget(self.bioSex_dropdown, 1, 0, alignment=Qt.AlignmentFlag.AlignTop)
 
-        # Age grid layout
+        # Age grid layout, with modification conditional
         self.age_layout = QGridLayout()
         self.age_input = QLineEdit(self)
         if isNew:
@@ -59,7 +59,7 @@ class ModifyProfileWindow(QMainWindow):
         self.age_layout.addWidget(self.age_text, 0, 0, alignment=Qt.AlignmentFlag.AlignBottom)
         self.age_layout.addWidget(self.age_input, 1, 0, alignment=Qt.AlignmentFlag.AlignTop)
 
-        # currentWeight grid layout
+        # currentWeight grid layout, with modification conditional
         self.currentWeight_layout = QGridLayout()
         self.currentWeight_input = QLineEdit(self)
         if isNew:
@@ -69,7 +69,7 @@ class ModifyProfileWindow(QMainWindow):
         self.currentWeight_layout.addWidget(self.currentWeight_text, 0, 0, alignment=Qt.AlignmentFlag.AlignBottom)
         self.currentWeight_layout.addWidget(self.currentWeight_input, 1, 0, alignment=Qt.AlignmentFlag.AlignTop)
 
-        # currentWeight grid layout
+        # currentWeight grid layout, with modification conditional
         self.goalWeight_layout = QGridLayout()
         self.goalWeight_input = QLineEdit(self)
         if isNew:
@@ -79,7 +79,7 @@ class ModifyProfileWindow(QMainWindow):
         self.currentWeight_layout.addWidget(self.goalWeight_text, 0, 1, alignment=Qt.AlignmentFlag.AlignBottom)
         self.currentWeight_layout.addWidget(self.goalWeight_input, 1, 1, alignment=Qt.AlignmentFlag.AlignTop)
 
-        # Height prid layout
+        # Height prid layout, with modification conditional
         self.height_layout = QGridLayout()
         self.feetHeight_input = QLineEdit(self)
         self.inchesHeight_input = QLineEdit(self)
@@ -101,7 +101,7 @@ class ModifyProfileWindow(QMainWindow):
         self.heightInches_layout.addWidget(self.inchesHeight_text, 0, 1)
         self.height_layout.addLayout(self.heightInches_layout, 1, 1, alignment=Qt.AlignmentFlag.AlignTop)
 
-        # Acitivity level layout
+        # Acitivity level layout, with modification conditional
         self.activity_layout = QGridLayout()
         self.activitySlider_layout = QGridLayout()
         self.activity_slider = QSlider(Qt.Horizontal, self)
@@ -132,7 +132,7 @@ class ModifyProfileWindow(QMainWindow):
         self.layout.addLayout(self.height_layout)
         self.layout.addLayout(self.activity_layout)
 
-        # Create Update Info button & layout
+        # Create Update or Cancel button based on modification conditional
         self.modifyButton_layout = QGridLayout()
         if isNew:
             self.modify_button = QPushButton("Create")
@@ -147,15 +147,21 @@ class ModifyProfileWindow(QMainWindow):
         self.modify_button.clicked.connect(self.on_pushButton_clicked)
         self.dialog = MainWindow.MainWindow("chris")
 
+        # Dialog instance in PyQT. Might be useful to show if not all boxes are filled in.
         #info = QMessageBox.information(self, "", "Please fill in the missing categories.")
 
+    # Changes view
     def on_pushButton_clicked(self):
         self.dialog.show()
 
 if __name__ == "__main__":
 
     app = QApplication(sys.argv)
-    window = ModifyProfileWindow(True)
+
+    # Ternary operator that loads display based on whether input is "true" or "false".
+    isNew = True if input("New profile? (true/false)\n>>> ").lower() == "true" else False
+    
+    window = ModifyProfileWindow(isNew)
     window.show()
 
     app.exec() 
