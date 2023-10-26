@@ -1,2 +1,5 @@
-name,current_weight lb,goal_weight lb,age,activity level 0-4,height inches,gender,check-ins start (date m/d/y.weight lb)
-chris,190,180,26,2,69,m,
+name,current_weight lb,goal_weight lb,age,activity level 0-4,height inches,sex,check-ins start (date m/d/y.weight lb)
+Chris,190,180,26,2,69,m,
+Jerry,175,180,28,3,67,m,
+Alex,160,170,24,4,62,f,
+Louis,198,170,34,0,73,m,

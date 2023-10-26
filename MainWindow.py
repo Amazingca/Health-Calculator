@@ -8,8 +8,7 @@ PyQt Terminology:
 -event: every interaction the user has with a Qt Application is a kind of event (event Object)
 """
 
-import ProfileData
-import qdarkstyle
+import ModifyProfileWindow, ProfileSelectWindow, ProfileData, qdarkstyle
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtWidgets import QMainWindow, QLabel, QPushButton, QVBoxLayout, QWidget, QPlainTextEdit, QGridLayout
 
@@ -17,6 +16,7 @@ class MainWindow(QMainWindow):
     def __init__(self, profile_name):
         super().__init__()
 
+        self.profile_name = profile_name
         self.profile_data = ProfileData.ProfileData(profile_name)
 
         # Set Up Window Title, Size, and Style (Dark)
@@ -32,9 +32,11 @@ class MainWindow(QMainWindow):
         # Create Buttons
         self.top_button_layout = QGridLayout()
         self.update_button = QPushButton("Update Info")
+        self.update_button.clicked.connect(self.change_to_modify_profile)
         self.history_button = QPushButton("History")
         self.workouts_button = QPushButton("Workouts")
         self.settings_button = QPushButton("Settings")
+        self.settings_button.clicked.connect(self.change_to_settings)
         self.top_button_layout.addWidget(self.update_button, 0, 0)
         self.top_button_layout.addWidget(self.history_button, 0, 1)
         self.top_button_layout.addWidget(self.workouts_button, 0, 2)
@@ -175,5 +177,13 @@ class MainWindow(QMainWindow):
         self.check_in_button = QPushButton("Check In")
         self.bottom_button_layout.addWidget(self.check_in_button)
         self.layout.addLayout(self.bottom_button_layout)
-
     
+    def change_to_modify_profile(self):
+        self.modificationView = ModifyProfileWindow.ModifyProfileWindow([True, [self.profile_name]])
+        self.modificationView.show()
+        self.close()
+
+    def change_to_settings(self):
+        self.settingsView = ProfileSelectWindow.ProfileSelectWindow()
+        self.settingsView.show()
+        self.close()
