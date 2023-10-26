@@ -12,12 +12,12 @@ class ProfileData:
         self.activity_level = 0
         self.activity_level_multiplier = 0
         self.height_ = 0
-        self.gender = None
+        self.bioSex = None
         self.bmr = 0
         self.today_date = datetime.date.today().strftime("%m/%d/%Y")
         self.build_from_profile()
 
-    def build_from_profile(self):
+    def build_from_profile(self, *args):
         with open("profiles.csv", 'r', newline='') as profile:
             csv_reader = csv.reader(profile)
 
@@ -28,7 +28,7 @@ class ProfileData:
                     self.age = int(row[3])
                     self.activity_level = int(row[4])
                     self.height_ = int(row[5])
-                    self.gender = row[6]
+                    self.bioSex = row[6]
                     break
 
             current_weight_kg = self.current_weight * 0.45359237
@@ -37,10 +37,14 @@ class ProfileData:
             self.bmr = self.calc_bmr(current_weight_kg, height_cm)
             
             self.activity_level_multiplier = self.generate_activity_level_multiplier()
+
+            if args:
+                if args[0] == True:
+                    return self.profile_name, "male" if self.bioSex == "m" else "female", self.age, self.current_weight, self.goal_weight, self.height_, self.activity_level
             
     def calc_bmr(self, weight, height):
         # Requires kg and cm measurements
-        if self.gender == "m":
+        if self.bioSex == "m":
             return ((10 * weight) + (6.25 * height) - (5 * self.age) + 5)
         else:
             return ((10 * weight) + (6.25 * height) - (5 * self.age) - 161)
@@ -81,7 +85,7 @@ class ProfileData:
         elif self.age < 9: return 400
         elif self.age < 14: return 600
         else:
-            if self.gender == "m": return 900
+            if self.bioSex == "m": return 900
             else: return 700
 
     def calc_target_vitmain_C(self):
@@ -92,10 +96,10 @@ class ProfileData:
         elif self.age < 9: return 25
         elif self.age < 14: return 45
         elif self.age < 19:
-            if self.gender == "m": return 75
+            if self.bioSex == "m": return 75
             else: return 65
         else:
-            if self.gender == "m": return 90
+            if self.bioSex == "m": return 90
             else: return 75
 
     def calc_target_vitamin_D(self):
@@ -113,11 +117,11 @@ class ProfileData:
         elif self.age < 9: return 0.6
         elif self.age < 14: return 1.0
         elif self.age < 19:
-            if self.gender == "m": return 1.3
+            if self.bioSex == "m": return 1.3
             else: return 1.2
         elif self.age < 51: return 1.3
         else: 
-            if self.gender == "m": return 1.7
+            if self.bioSex == "m": return 1.7
             else: return 1.5
 
     def calc_target_vitmain_E(self):
@@ -138,7 +142,7 @@ class ProfileData:
         elif self.age < 14: return 60
         elif self.age < 19: return 75
         else:
-            if self.gender == "m": return 120
+            if self.bioSex == "m": return 120
             else: return 90
 
     def calc_target_vitamin_thiamin(self):
@@ -149,10 +153,10 @@ class ProfileData:
         elif self.age < 9: return 0.6
         elif self.age < 14: return 0.9
         elif self.age < 19:
-            if self.gender == "m": return 1.2
+            if self.bioSex == "m": return 1.2
             else: return 1.0
         else:
-            if self.gender == "m": return 1.2
+            if self.bioSex == "m": return 1.2
             else: return 1.1
 
     def calc_target_vitmain_B12(self):
@@ -172,10 +176,10 @@ class ProfileData:
         elif self.age < 9: return 0.6
         elif self.age < 14: return 0.9
         elif self.age < 19:
-            if self.gender == "m": return 1.3
+            if self.bioSex == "m": return 1.3
             else: return 1.0
         else:
-            if self.gender == "m": return 1.3
+            if self.bioSex == "m": return 1.3
             else: return 1.1
         
     def calc_target_vitmain_folate(self):
@@ -195,7 +199,7 @@ class ProfileData:
         elif self.age < 9: return 8
         elif self.age < 14: return 12
         else:
-            if self.gender == "m": return 16
+            if self.bioSex == "m": return 16
             else: return 14
 
     def calc_target_vitamin_choline(self):
@@ -206,10 +210,10 @@ class ProfileData:
         elif self.age < 9: return 250
         elif self.age < 14: return 375
         elif self.age < 19:
-            if self.gender == "m": return 550
+            if self.bioSex == "m": return 550
             else: return 400
         else:
-            if self.gender == "m": return 550
+            if self.bioSex == "m": return 550
             else: return 425
             
     def calc_target_vitamin_pantothenic_acid(self):
@@ -239,7 +243,7 @@ class ProfileData:
         elif self.age < 9: return 400
         elif self.age < 14: return 600
         else:
-            if self.gender == "m": return 900
+            if self.bioSex == "m": return 900
             else: return 700
 
     def calc_target_mineral_calcium(self):
@@ -251,7 +255,7 @@ class ProfileData:
         elif self.age < 19: return 1300
         elif self.age < 51: return 1000
         elif self.age < 70:
-            if self.gender == "m": return 1000
+            if self.bioSex == "m": return 1000
             else: return 1200
         else: return 1200
 
@@ -271,16 +275,16 @@ class ProfileData:
         if self.age < 4: return 11
         elif self.age < 9: return 15
         elif self.age < 14:
-            if self.gender == "m": return 25
+            if self.bioSex == "m": return 25
             else: return 21
         elif self.age < 19:
-            if self.gender == "m": return 35
+            if self.bioSex == "m": return 35
             else: return 24
         elif self.age < 51:
-            if self.gender == "m": return 35
+            if self.bioSex == "m": return 35
             else: return 25
         else: 
-            if self.gender == "m": return 30
+            if self.bioSex == "m": return 30
             else: return 20
 
     def calc_target_mineral_copper(self):
@@ -302,7 +306,7 @@ class ProfileData:
         elif self.age < 14: return 2
         elif self.age < 19: return 3
         else: 
-            if self.gender == "m":
+            if self.bioSex == "m":
                 return 4
             else:
                 return 3
@@ -322,10 +326,10 @@ class ProfileData:
         if self.age < 4: return 7
         elif self.age < 9: return 10
         elif self.age < 14:
-            if self.gender == "m": return 11
+            if self.bioSex == "m": return 11
             else: return 15
         elif self.age < 51:
-            if self.gender == "m": return 8
+            if self.bioSex == "m": return 8
             else: return 18
         else: return 8
     
@@ -337,13 +341,13 @@ class ProfileData:
         elif self.age < 9: return 130
         elif self.age < 14: return 240
         elif self.age < 19: 
-            if self.gender == "m": return 410
+            if self.bioSex == "m": return 410
             else: return 360
         elif self.age < 31: 
-            if self.gender == "m": return 400
+            if self.bioSex == "m": return 400
             else: return 310
         else:
-            if self.gender == "m": return 420
+            if self.bioSex == "m": return 420
             else: return 320
 
     def calc_target_mineral_manganese(self):
@@ -353,13 +357,13 @@ class ProfileData:
         if self.age < 4: return 1.2
         elif self.age < 9: return 1.5
         elif self.age < 14: 
-            if self.gender == "m": return 1.9
+            if self.bioSex == "m": return 1.9
             else: return 1.6
         elif self.age < 19: 
-            if self.gender == "m": return 2.2
+            if self.bioSex == "m": return 2.2
             else: return 1.6
         else: 
-            if self.gender == "m": return 2.3
+            if self.bioSex == "m": return 2.3
             else: return 1.8
 
     def calc_target_mineral_molybdenum(self):
@@ -388,13 +392,13 @@ class ProfileData:
         if self.age < 4: return 2
         elif self.age < 9: return 2.3
         elif self.age < 14: 
-            if self.gender == "m": return 2.5
+            if self.bioSex == "m": return 2.5
             else: return 2.3
         elif self.age < 19: 
-            if self.gender == "m": return 3
+            if self.bioSex == "m": return 3
             else: return 2.3
         else: 
-            if self.gender == "m": return 3.4
+            if self.bioSex == "m": return 3.4
             else: return 2.6
 
     def calc_target_mineral_selenium(self):
@@ -420,10 +424,10 @@ class ProfileData:
         elif self.age < 9: return 5
         elif self.age < 14: return 8 
         elif self.age < 19: 
-            if self.gender == "m": return 11
+            if self.bioSex == "m": return 11
             else: return 9
         else:
-            if self.gender == "m": return 11
+            if self.bioSex == "m": return 11
             else: return 8
 
 

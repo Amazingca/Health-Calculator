@@ -1,11 +1,15 @@
-import MainWindow
-import qdarkstyle, sys
+import MainWindow, ProfileData
+import qdarkstyle, sys, csv
 from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 
 class ModifyProfileWindow(QMainWindow):
     def __init__(self, isNew):
         super().__init__()
+
+        existingProfile = ()
+        if isNew == False:
+            existingProfile = ProfileData.ProfileData("chris").build_from_profile(True)
 
         # Set Up Window Title (with conditional), Size, and Style (Dark)
         if isNew:
@@ -35,6 +39,7 @@ class ModifyProfileWindow(QMainWindow):
             self.name_text = QLabel("<b>Enter your name:<b>")
         else:
             self.name_text = QLabel("<b>Change your name:<b>")
+            self.name_input.setText(existingProfile[0])
         self.name_layout.addWidget(self.name_text, 0, 0, alignment=Qt.AlignmentFlag.AlignBottom)
         self.name_layout.addWidget(self.name_input, 1, 0, alignment=Qt.AlignmentFlag.AlignTop)
 
@@ -46,6 +51,7 @@ class ModifyProfileWindow(QMainWindow):
             self.bioSex_text = QLabel("<b>Choose your biological sex:<b>")
         else:
             self.bioSex_text = QLabel("<b>Change your biological sex:<b>")
+            self.bioSex_dropdown.setCurrentText(existingProfile[1].capitalize())
         self.bioSex_layout.addWidget(self.bioSex_text, 0, 0, alignment=Qt.AlignmentFlag.AlignBottom)
         self.bioSex_layout.addWidget(self.bioSex_dropdown, 1, 0, alignment=Qt.AlignmentFlag.AlignTop)
 
@@ -56,6 +62,7 @@ class ModifyProfileWindow(QMainWindow):
             self.age_text = QLabel("<b>Enter your age:<b>")
         else:
             self.age_text = QLabel("<b>Change your age:<b>")
+            self.age_input.setText(f"{existingProfile[2]}")
         self.age_layout.addWidget(self.age_text, 0, 0, alignment=Qt.AlignmentFlag.AlignBottom)
         self.age_layout.addWidget(self.age_input, 1, 0, alignment=Qt.AlignmentFlag.AlignTop)
 
@@ -66,6 +73,7 @@ class ModifyProfileWindow(QMainWindow):
             self.currentWeight_text = QLabel("<b>Enter your weight:<b>")
         else:
             self.currentWeight_text = QLabel("<b>Change your weight:<b>")
+            self.currentWeight_input.setText(f"{existingProfile[3]}")
         self.currentWeight_layout.addWidget(self.currentWeight_text, 0, 0, alignment=Qt.AlignmentFlag.AlignBottom)
         self.currentWeight_layout.addWidget(self.currentWeight_input, 1, 0, alignment=Qt.AlignmentFlag.AlignTop)
 
@@ -76,6 +84,7 @@ class ModifyProfileWindow(QMainWindow):
             self.goalWeight_text = QLabel("<b>Enter your goal:<b>")
         else:
             self.goalWeight_text = QLabel("<b>Change your goal:<b>")
+            self.goalWeight_input.setText(f"{existingProfile[4]}")
         self.currentWeight_layout.addWidget(self.goalWeight_text, 0, 1, alignment=Qt.AlignmentFlag.AlignBottom)
         self.currentWeight_layout.addWidget(self.goalWeight_input, 1, 1, alignment=Qt.AlignmentFlag.AlignTop)
 
@@ -87,6 +96,10 @@ class ModifyProfileWindow(QMainWindow):
             self.height_text = QLabel("<b>Enter your height:<b>")
         else:
             self.height_text = QLabel("<b>Change your height:<b>")
+            feet = existingProfile[5] // 12
+            inches = existingProfile[5] % 12
+            self.feetHeight_input.setText(f"{feet}")
+            self.inchesHeight_input.setText(f"{inches}")
         self.height_layout.addWidget(self.height_text, 0, 0, alignment=Qt.AlignmentFlag.AlignBottom)
         # Feet sub-layout
         self.heightFeet_layout = QGridLayout()
@@ -113,6 +126,7 @@ class ModifyProfileWindow(QMainWindow):
             self.activity_text = QLabel("<b>Choose your activity level:<b>")
         else:
             self.activity_text = QLabel("<b>Change your activity level:<b>")
+            self.activity_slider.setSliderPosition(existingProfile[6])
         self.activity_layout.addWidget(self.activity_text, 0, 0, alignment=Qt.AlignmentFlag.AlignBottom)
         self.activitySlider_layout.addWidget(self.activity_slider, 0, 0)
         self.sliderText_layout = QGridLayout()
@@ -153,6 +167,10 @@ class ModifyProfileWindow(QMainWindow):
     # Changes view
     def on_pushButton_clicked(self):
         self.dialog.show()
+
+    # Function that handle profile creation/updating.
+    def updateProfile(self, isNew):
+        None
 
 if __name__ == "__main__":
 
