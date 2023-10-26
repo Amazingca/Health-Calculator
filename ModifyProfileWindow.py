@@ -13,12 +13,12 @@ class ModifyProfileWindow(QMainWindow):
         if isNew[0] == True:
             existingProfile = ProfileData.ProfileData(isNew[1][0]).build_from_profile(True)
             self.name = existingProfile[0]
-            isNew = False
+            self.isNew = False
         else:
-            isNew = True
+            self.isNew = True
 
         # Set Up Window Title (with conditional), Size, and Style (Dark)
-        if isNew:
+        if self.isNew:
             self.setWindowTitle("Welcome - Health Calculator")
         else:
             self.setWindowTitle("Update - Health Calculator")
@@ -32,7 +32,7 @@ class ModifyProfileWindow(QMainWindow):
         self.layout = QVBoxLayout(self.central_widget)
 
         # Header grid layout, with modification conditional
-        if isNew:
+        if self.isNew:
             self.header = QLabel("<b>Add a New Profile<b>")
         else:
             self.header = QLabel("<b>Modify Profile")
@@ -41,7 +41,7 @@ class ModifyProfileWindow(QMainWindow):
         # Name grid layout, with modification conditional
         self.name_layout = QGridLayout()
         self.name_input = QLineEdit(self)
-        if isNew:
+        if self.isNew:
             self.name_text = QLabel("<b>Enter your name:<b>")
         else:
             self.name_text = QLabel("<b>Change your name:<b>")
@@ -53,7 +53,7 @@ class ModifyProfileWindow(QMainWindow):
         self.bioSex_layout = QGridLayout()
         self.bioSex_dropdown = QComboBox()
         self.bioSex_dropdown.addItems(['Choose', 'Male', 'Female'])
-        if isNew:
+        if self.isNew:
             self.bioSex_text = QLabel("<b>Choose your biological sex:<b>")
         else:
             self.bioSex_text = QLabel("<b>Change your biological sex:<b>")
@@ -64,7 +64,7 @@ class ModifyProfileWindow(QMainWindow):
         # Age grid layout, with modification conditional
         self.age_layout = QGridLayout()
         self.age_input = QLineEdit(self)
-        if isNew:
+        if self.isNew:
             self.age_text = QLabel("<b>Enter your age:<b>")
         else:
             self.age_text = QLabel("<b>Change your age:<b>")
@@ -75,7 +75,7 @@ class ModifyProfileWindow(QMainWindow):
         # currentWeight grid layout, with modification conditional
         self.currentWeight_layout = QGridLayout()
         self.currentWeight_input = QLineEdit(self)
-        if isNew:
+        if self.isNew:
             self.currentWeight_text = QLabel("<b>Enter your weight:<b>")
         else:
             self.currentWeight_text = QLabel("<b>Change your weight:<b>")
@@ -86,7 +86,7 @@ class ModifyProfileWindow(QMainWindow):
         # currentWeight grid layout, with modification conditional
         self.goalWeight_layout = QGridLayout()
         self.goalWeight_input = QLineEdit(self)
-        if isNew:
+        if self.isNew:
             self.goalWeight_text = QLabel("<b>Enter your goal:<b>")
         else:
             self.goalWeight_text = QLabel("<b>Change your goal:<b>")
@@ -98,7 +98,7 @@ class ModifyProfileWindow(QMainWindow):
         self.height_layout = QGridLayout()
         self.feetHeight_input = QLineEdit(self)
         self.inchesHeight_input = QLineEdit(self)
-        if isNew:
+        if self.isNew:
             self.height_text = QLabel("<b>Enter your height:<b>")
         else:
             self.height_text = QLabel("<b>Change your height:<b>")
@@ -128,7 +128,7 @@ class ModifyProfileWindow(QMainWindow):
         self.activity_slider.setMaximum(4)
         self.activity_slider.setTickInterval(1)
         self.activity_slider.setSingleStep(1)
-        if isNew:
+        if self.isNew:
             self.activity_text = QLabel("<b>Choose your activity level:<b>")
         else:
             self.activity_text = QLabel("<b>Change your activity level:<b>")
@@ -154,18 +154,18 @@ class ModifyProfileWindow(QMainWindow):
 
         # Create Update or Cancel button based on modification conditional
         self.modifyButton_layout = QGridLayout()
-        if isNew:
+        if self.isNew:
             self.modify_button = QPushButton("Create")
             self.modifyButton_layout.addWidget(self.modify_button)
         else:
             self.modify_button = QPushButton("Update")
             self.modifyButton_layout.addWidget(self.modify_button, 0, 1)
             self.cancel_button = QPushButton("Cancel")
-            self.cancel_button.clicked.connect(self.cancelModify)
+            self.cancel_button.clicked.connect(self.closeModify)
             self.modifyButton_layout.addWidget(self.cancel_button, 0, 0)
         self.layout.addLayout(self.modifyButton_layout)
 
-        self.modify_button.clicked.connect(self.on_pushButton_clicked)
+        self.modify_button.clicked.connect(self.updateProfile)
 
         # Dialog instance in PyQT. Might be useful to show if not all boxes are filled in.
         #info = QMessageBox.information(self, "", "Please fill in the missing categories.")
@@ -177,13 +177,70 @@ class ModifyProfileWindow(QMainWindow):
         self.close()
 
     # Function that handle profile creation/updating.
-    def updateProfile(self, isNew):
-        None
+    def updateProfile(self):
 
-    # Go back to MainWindow without saving any changes.
-    def cancelModify(self):
-        self.cancelScreen = MainWindow.MainWindow(self.name)
-        self.cancelScreen.show()
+        heightInches = None
+        bioSex = None
+        dataObj = None
+
+        try:
+            if (int(self.feetHeight_input.text()) > 9) or (int(self.inchesHeight_input.text()) > 12):
+                raise ValueError("")
+            heightInches = (int(self.feetHeight_input.text()) * 12) + int(self.inchesHeight_input.text()) if self.feetHeight_input.text() != "" else int(self.inchesHeight_input.text())
+            bioSex = "m" if self.bioSex_dropdown.currentText() == "Male" else "f"
+            dataObj = [self.name_input.text(), self.currentWeight_input.text(), self.goalWeight_input.text(), self.age_input.text(), str(self.activity_slider.value()), str(heightInches), bioSex, "\n"]
+        except:
+            info = QMessageBox.warning(self, "", "Please fill in all the fields, or correct the ones with improper data.")
+            return
+
+        if ((self.name == "name") or (dataObj[0] == "name")):
+            info = QMessageBox.warning(self, "", "The name you are trying to set has been reserved as a keyword. Please use another.")
+            return
+        
+        if self.isNew == True:
+            doesExist = False
+            with open("profiles.csv", "r", newline="") as profilesText:
+                profilesReader = csv.reader(profilesText)
+                for profile in profilesReader:
+                    if profile[0] == dataObj[0]:
+                        doesExist = True
+
+            if doesExist == True:
+                info = QMessageBox.warning(self, "", "A profile with this name already exists!")
+            else:
+                with open("profiles.csv", "a", newline="") as profilesWriter:
+                    profilesWriter.write("\n" + ",".join(dataObj[:-1]) + ",")
+                    self.name = dataObj[0]
+                    self.closeModify()
+        else:
+            contents = None
+            location = None
+            with open("profiles.csv", "r", newline="") as profilesText:
+                profilesReader = csv.reader(profilesText)
+                index = 1
+                for profile in profilesReader:
+                    if profile[0] == "name":
+                        continue
+                    if profile[0] == self.name:
+                        location = index
+                    index += 1
+            
+            with open("profiles.csv", "r", newline="") as profilesText:
+                contents = profilesText.readlines()
+            
+            if location != None:
+                contents[location] = ",".join(dataObj)
+                with open("profiles.csv", "w") as profilesWriter:
+                    contents = "".join(contents)
+                    profilesWriter.write(contents)
+                self.closeModify()
+            else:
+                info = QMessageBox.warning(self, "", "There was an error setting the item.")
+
+    # Go back to MainWindow. This is done either when the user doesn't want to save their changes or has saved their changes.
+    def closeModify(self):
+        self.closeScreen = MainWindow.MainWindow(self.name)
+        self.closeScreen.show()
         self.close()
 
 if __name__ == "__main__":
@@ -191,7 +248,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     # Ternary operator that loads display based on whether input is "true" or "false".
-    isNew = [False, []] if input("Existing profile? (true/false)\n>>> ").lower() == "true" else [True, ["chris"]]
+    isNew = [False, []] if input("Existing profile? (true/false)\n>>> ").lower() == "true" else [True, ["Chris"]]
     window = ModifyProfileWindow(isNew)
     window.show()
 
