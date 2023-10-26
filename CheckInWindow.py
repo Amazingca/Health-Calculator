@@ -10,7 +10,7 @@ class CheckInWindow(QMainWindow):
         self.profile_name = profile_name
         self.today_date = today_date
 
-         # Set Up Window Title, Size, and Style (Dark)
+        # Set Up Window Title, Size, and Style (Dark)
         self.setWindowTitle("Health Calculator Demo")
         self.setFixedSize(QSize(294, 150))
         self.setStyleSheet(qdarkstyle.load_stylesheet())
@@ -83,10 +83,4 @@ class CheckInWindow(QMainWindow):
         self.return_window.show()
         self.close()
 
-if __name__ == "__main__":
-        
-        app = QApplication(sys.argv)
-        window = CheckInWindow("Chris", "10/26/2023")        
-        window.show()
-        app.exec() 
 

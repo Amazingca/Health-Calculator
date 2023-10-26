@@ -8,7 +8,7 @@ PyQt Terminology:
 -event: every interaction the user has with a Qt Application is a kind of event (event Object)
 """
 
-import ModifyProfileWindow, ProfileSelectWindow, CheckInWindow, ProfileData, qdarkstyle
+import ModifyProfileWindow, ProfileSelectWindow, CheckInWindow, ProfileData, ProgressGraphWindow, qdarkstyle, webbrowser
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtWidgets import QMainWindow, QLabel, QPushButton, QVBoxLayout, QWidget, QPlainTextEdit, QGridLayout
 
@@ -34,7 +34,9 @@ class MainWindow(QMainWindow):
         self.update_button = QPushButton("Update Info")
         self.update_button.clicked.connect(self.change_to_modify_profile)
         self.history_button = QPushButton("History")
+        self.history_button.clicked.connect(self.open_history_graph)
         self.workouts_button = QPushButton("Workouts")
+        self.workouts_button.clicked.connect(self.open_webpage)
         self.settings_button = QPushButton("Settings")
         self.settings_button.clicked.connect(self.change_to_settings)
         self.top_button_layout.addWidget(self.update_button, 0, 0)
@@ -193,3 +195,10 @@ class MainWindow(QMainWindow):
         self.checkInView = CheckInWindow.CheckInWindow(self.profile_name, self.profile_data.today_date)
         self.checkInView.show()
         self.close()
+
+    def open_webpage(self):
+        webbrowser.open("https://liftvault.com/search/")
+
+    def open_history_graph(self):
+        self.historyGraphView = ProgressGraphWindow.ProgressGraphWindow(self.profile_name)
+        self.historyGraphView.show()
