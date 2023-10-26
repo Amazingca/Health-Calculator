@@ -7,9 +7,15 @@ class ModifyProfileWindow(QMainWindow):
     def __init__(self, isNew):
         super().__init__()
 
+        # Constructs existing profile data tuple if passed CSV extrapolation yields positive values.
         existingProfile = ()
-        if isNew == False:
-            existingProfile = ProfileData.ProfileData("chris").build_from_profile(True)
+        self.name = None
+        if isNew[0] == True:
+            existingProfile = ProfileData.ProfileData(isNew[1][0]).build_from_profile(True)
+            self.name = existingProfile[0]
+            isNew = False
+        else:
+            isNew = True
 
         # Set Up Window Title (with conditional), Size, and Style (Dark)
         if isNew:
@@ -155,30 +161,37 @@ class ModifyProfileWindow(QMainWindow):
             self.modify_button = QPushButton("Update")
             self.modifyButton_layout.addWidget(self.modify_button, 0, 1)
             self.cancel_button = QPushButton("Cancel")
+            self.cancel_button.clicked.connect(self.cancelModify)
             self.modifyButton_layout.addWidget(self.cancel_button, 0, 0)
         self.layout.addLayout(self.modifyButton_layout)
 
         self.modify_button.clicked.connect(self.on_pushButton_clicked)
-        self.dialog = MainWindow.MainWindow("chris")
 
         # Dialog instance in PyQT. Might be useful to show if not all boxes are filled in.
         #info = QMessageBox.information(self, "", "Please fill in the missing categories.")
 
     # Changes view
     def on_pushButton_clicked(self):
+        self.dialog = MainWindow.MainWindow(self.name)
         self.dialog.show()
+        self.close()
 
     # Function that handle profile creation/updating.
     def updateProfile(self, isNew):
         None
+
+    # Go back to MainWindow without saving any changes.
+    def cancelModify(self):
+        self.cancelScreen = MainWindow.MainWindow(self.name)
+        self.cancelScreen.show()
+        self.close()
 
 if __name__ == "__main__":
 
     app = QApplication(sys.argv)
 
     # Ternary operator that loads display based on whether input is "true" or "false".
-    isNew = True if input("New profile? (true/false)\n>>> ").lower() == "true" else False
-    
+    isNew = [False, []] if input("Existing profile? (true/false)\n>>> ").lower() == "true" else [True, ["chris"]]
     window = ModifyProfileWindow(isNew)
     window.show()
 
