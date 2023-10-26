@@ -8,7 +8,7 @@ PyQt Terminology:
 -event: every interaction the user has with a Qt Application is a kind of event (event Object)
 """
 
-import ModifyProfileWindow, ProfileSelectWindow, ProfileData, qdarkstyle
+import ModifyProfileWindow, ProfileSelectWindow, CheckInWindow, ProfileData, qdarkstyle
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtWidgets import QMainWindow, QLabel, QPushButton, QVBoxLayout, QWidget, QPlainTextEdit, QGridLayout
 
@@ -175,6 +175,7 @@ class MainWindow(QMainWindow):
 
         self.bottom_button_layout = QGridLayout()
         self.check_in_button = QPushButton("Check In")
+        self.check_in_button.clicked.connect(self.change_to_check_in)
         self.bottom_button_layout.addWidget(self.check_in_button)
         self.layout.addLayout(self.bottom_button_layout)
     
@@ -186,4 +187,9 @@ class MainWindow(QMainWindow):
     def change_to_settings(self):
         self.settingsView = ProfileSelectWindow.ProfileSelectWindow()
         self.settingsView.show()
+        self.close()
+
+    def change_to_check_in(self):
+        self.checkInView = CheckInWindow.CheckInWindow(self.profile_name, self.profile_data.today_date)
+        self.checkInView.show()
         self.close()
