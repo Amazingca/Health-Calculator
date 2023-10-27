@@ -192,9 +192,11 @@ class ModifyProfileWindow(QMainWindow):
         except:
             info = QMessageBox.warning(self, "", "Please fill in all the fields, or correct the ones with improper data.")
             return
+        
+        blacklistedTerms = ["name"]
 
-        if ((self.name == "name") or (dataObj[0] == "name")):
-            info = QMessageBox.warning(self, "", "The name you are trying to set has been reserved as a keyword. Please use another.")
+        if (("," in self.name) or ("," in dataObj[0]) or (self.name in blacklistedTerms) or (dataObj[0] in blacklistedTerms)):
+            info = QMessageBox.warning(self, "", "The name you are trying to set has been reserved as a keyword or contains blacklisted characters. Please use another.")
             return
         
         if self.isNew == True:
