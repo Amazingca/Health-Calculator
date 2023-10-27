@@ -3,13 +3,13 @@
 Will Improve UI later.  
 """
 
-import qdarkstyle, sys, csv, main
+import qdarkstyle, sys, csv, main, ModifyProfileWindow, MainWindow
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QWidget, QGridLayout, QComboBox
 from pathlib import Path
 
 class ProfileSelectWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, profileName):
         super().__init__()
 
         # Set Up Window Title, Size, and Style (Dark)
@@ -27,9 +27,12 @@ class ProfileSelectWindow(QMainWindow):
         self.profile_select_label = QLabel("Select Profile") # Insert name from .csv here
         self.profile_select_dropdown = QComboBox(self)
         profiles = self.getProfiles()
-        for profile in profiles:
+        locationOfUser = None
+        for index, profile in enumerate(profiles):
+            if profileName == profile:
+                locationOfUser = index
             self.profile_select_dropdown.addItem(profile)
-        self.profile_select_dropdown.setCurrentIndex(0)
+        self.profile_select_dropdown.setCurrentIndex(locationOfUser)
         self.profile_select_layout.addWidget(self.profile_select_label, 0, 0)
         self.profile_select_layout.addWidget(self.profile_select_dropdown, 0, 1)
         self.profile_select_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
@@ -39,13 +42,16 @@ class ProfileSelectWindow(QMainWindow):
         self.load_profile_button = QPushButton("Load Profile")
         self.create_profile_button = QPushButton("Create Profile")
         self.delete_profile_button = QPushButton("Delete Profile")
-        self.delete_profile_button.clicked.connect(self.deleteProfile)
         self.button_layout.addWidget(self.load_profile_button, 0, 0)
         self.button_layout.addWidget(self.create_profile_button, 0, 1)
         self.button_layout.addWidget(self.delete_profile_button, 0, 2)
         self.button_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.layout.addLayout(self.button_layout)
         self.layout.addLayout(self.profile_select_layout)
+
+        self.load_profile_button.clicked.connect(self.load_profile)
+        self.create_profile_button.clicked.connect(self.go_to_profile_creation)
+        self.delete_profile_button.clicked.connect(self.deleteProfile)
     
     def getProfiles(self):
         profilesExist = main.Main.profilesExist()
@@ -64,12 +70,26 @@ class ProfileSelectWindow(QMainWindow):
                 if profile[0] != name:
                     newProfiles.append(profile)
             print(newProfiles)
+    
+    def load_profile(self):
+        self.profile_to_load = self.profile_select_dropdown.currentText()
+
+        self.mainWindow = MainWindow.MainWindow(self.profile_to_load)
+        self.mainWindow.show()
+
+        self.close()
+
+    def go_to_profile_creation(self):
+        self.profileCreate = ModifyProfileWindow.ModifyProfileWindow([False, []])
+        self.profileCreate.show()
+
+        self.close()
         
 
 if __name__ == "__main__":
 
     app = QApplication(sys.argv)
-    window = ProfileSelectWindow()
+    window = ProfileSelectWindow("Chris")
     window.show()
 
     app.exec() 

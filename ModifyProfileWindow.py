@@ -208,8 +208,17 @@ class ModifyProfileWindow(QMainWindow):
             if doesExist == True:
                 info = QMessageBox.warning(self, "", "A profile with this name already exists!")
             else:
+                commaCount = None
+                with open("profiles.csv", "r", newline="") as profilesText:
+                    profilesReader = profilesText.readlines()
+                    header = True
+                    for profile in profilesReader:
+                        if header == True:
+                            commaCount = profile.count(",")
+                            header = False
                 with open("profiles.csv", "a", newline="") as profilesWriter:
-                    profilesWriter.write("\n" + ",".join(dataObj[:-1]) + ",")
+                    print(commaCount)
+                    profilesWriter.write("\n" + ",".join(dataObj[:-1]) + ("," * (commaCount - 6)))
                     self.name = dataObj[0]
                     self.closeModify()
         else:

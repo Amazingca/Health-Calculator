@@ -187,7 +187,7 @@ class MainWindow(QMainWindow):
         self.close()
 
     def change_to_settings(self):
-        self.settingsView = ProfileSelectWindow.ProfileSelectWindow()
+        self.settingsView = ProfileSelectWindow.ProfileSelectWindow(self.profile_name)
         self.settingsView.show()
         self.close()
 
