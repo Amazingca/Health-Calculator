@@ -84,7 +84,6 @@ class ProfileSelectWindow(QMainWindow):
         self.profileCreate.show()
 
         self.close()
-        
 
 if __name__ == "__main__":
 
