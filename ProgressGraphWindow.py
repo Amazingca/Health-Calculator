@@ -1,4 +1,3 @@
-
 import MainWindow, qdarkstyle, sys, csv, datetime
 import pyqtgraph as pg
 from PyQt6.QtCore import QSize, Qt
@@ -36,7 +35,7 @@ class ProgressGraphWindow(QMainWindow):
 
         dates_and_weights = [[], []]
  
-        with open("profiles_TEST.csv", 'r', newline='') as profile: 
+        with open("profiles.csv", 'r', newline='') as profile: 
             csv_reader = csv.reader(profile)
         
             for row in csv_reader:
