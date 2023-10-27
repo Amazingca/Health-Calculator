@@ -1,5 +1,4 @@
-
-import qdarkstyle, sys, csv, datetime
+import MainWindow, qdarkstyle, sys, csv, datetime
 import pyqtgraph as pg
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtWidgets import QApplication, QMainWindow
