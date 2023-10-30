@@ -239,8 +239,14 @@ class ModifyProfileWindow(QMainWindow):
             with open("profiles.csv", "r", newline="") as profilesText:
                 contents = profilesText.readlines()
             
+            adjustedValues = contents[location].split(",")
+
+            for index, item in enumerate(adjustedValues):
+                if index < len(dataObj[:-1]):
+                    adjustedValues[index] = dataObj[:-1][index]
+            
             if location != None:
-                contents[location] = ",".join(dataObj)
+                contents[location] = ",".join(adjustedValues)
                 with open("profiles.csv", "w") as profilesWriter:
                     contents = "".join(contents)
                     profilesWriter.write(contents)
