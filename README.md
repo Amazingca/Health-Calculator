@@ -1,7 +1,7 @@
 # Health Calculator
 ## *A modernized application that tracks your changes in health.*
 
-The Health Calculator is a hackathon-themed project that aims to visualize your bodily health. Using an external package, PyQT, The Health Calculator allows for management of several health profiles, and advanced viewing of where you're at in your health journey.
+The Health Calculator is a hackathon-themed project that aims to visualize your bodily health. Using an external package, *PyQT*, The Health Calculator allows for management of several health profiles, and advanced viewing of where you're at in your health journey.
 
 ### Additional info on prerequisites and running
 
@@ -29,5 +29,7 @@ In order to run, the Health Calculator requires these modules:
 - [x] setuptools         65.5.0
 - [x] shiboken6          6.6.0
 - [x] six                1.16.0
+
+Most of these are automatically initialized upon installing *PyQt* and *pyqtgraph*.
 
 For demonstration purposes, the Health Calculator has a pre-populated `profiles.csv` file. To start fresh, remove all lines except for the column tables on lines 1.
