@@ -9,7 +9,7 @@ class ModifyProfileWindow(QMainWindow):
 
         # Constructs existing profile data tuple if passed CSV extrapolation yields positive values.
         existingProfile = ()
-        self.name = None
+        self.name = ""
         if isNew[0] == True:
             existingProfile = ProfileData.ProfileData(isNew[1][0]).build_from_profile(True)
             self.name = existingProfile[0]

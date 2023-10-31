@@ -63,13 +63,27 @@ class ProfileSelectWindow(QMainWindow):
 
     def deleteProfile(self):
         name = self.profile_select_dropdown.currentText()
-        with open("profiles.csv", "r") as profilesText:#, open("profiles.csv", "w") as profilesWrite:
-            profilesRead = csv.reader(profilesText)
-            newProfiles = []
-            for index, profile in enumerate(profilesRead):
-                if profile[0] != name:
+        newProfiles = []
+        with open("profiles.csv", "r", newline="") as profilesText:
+            profileLines = profilesText.readlines()
+            for profile in profileLines:
+                if profile.split(",")[0] != name:
                     newProfiles.append(profile)
-            print(newProfiles)
+        newProfiles[-1] = newProfiles[-1][:-2]
+        for index, profile in enumerate(newProfiles):
+            if profile == "":
+                newProfiles.pop(index)
+        with open("profiles.csv", "w", newline="") as profilesWriter:
+            profilesWriter.write("".join(newProfiles))
+
+        if (len(newProfiles) > 1):
+            self.refreshScr = ProfileSelectWindow(newProfiles[1].split(",")[0])
+            self.refreshScr.show()
+        else:
+            self.newProfile = ModifyProfileWindow.ModifyProfileWindow([False, []])
+            self.newProfile.show()
+
+        self.close()
     
     def load_profile(self):
         self.profile_to_load = self.profile_select_dropdown.currentText()
