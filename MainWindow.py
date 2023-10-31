@@ -20,7 +20,7 @@ class MainWindow(QMainWindow):
         self.profile_data = ProfileData.ProfileData(profile_name)
 
         # Set Up Window Title, Size, and Style (Dark)
-        self.setWindowTitle("Health Calculator Demo")
+        self.setWindowTitle("Health Calculator")
         self.setFixedSize(QSize(800, 600))
         self.setStyleSheet(qdarkstyle.load_stylesheet())
 

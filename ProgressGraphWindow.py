@@ -15,7 +15,7 @@ class ProgressGraphWindow(QMainWindow):
         self.dates_and_weights = self.get_initial_data() # [[dates], [weights]]
 
         # Set Up Window Title, Size, and Style (Dark)
-        self.setWindowTitle("Health Calculator Demo")
+        self.setWindowTitle("Health History - Health Calculator")
         self.setFixedSize(QSize(1000, 800))
         self.setStyleSheet(qdarkstyle.load_stylesheet())
 

@@ -11,7 +11,7 @@ class CheckInWindow(QMainWindow):
         self.today_date = today_date
 
         # Set Up Window Title, Size, and Style (Dark)
-        self.setWindowTitle("Health Calculator Demo")
+        self.setWindowTitle("Check In - Health Calculator")
         self.setFixedSize(QSize(294, 150))
         self.setStyleSheet(qdarkstyle.load_stylesheet())
 
