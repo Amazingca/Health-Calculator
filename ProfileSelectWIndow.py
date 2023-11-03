@@ -94,7 +94,7 @@ class ProfileSelectWindow(QMainWindow):
         self.close()
 
     def go_to_profile_creation(self):
-        self.profileCreate = ModifyProfileWindow.ModifyProfileWindow([False, []])
+        self.profileCreate = ModifyProfileWindow.ModifyProfileWindow([False, [None]])
         self.profileCreate.show()
 
         self.close()

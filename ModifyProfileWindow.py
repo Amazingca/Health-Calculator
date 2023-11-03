@@ -15,7 +15,13 @@ class ModifyProfileWindow(QMainWindow):
             self.name = existingProfile[0]
             self.isNew = False
         else:
-            self.isNew = True
+            if isNew[1]:
+                if isNew[1][0] == None:
+                    self.isNew = True
+                    self.profilesExist = True
+            else:
+                self.isNew = True
+                self.profilesExist = False
 
         # Set Up Window Title (with conditional), Size, and Style (Dark)
         if self.isNew:
@@ -155,8 +161,15 @@ class ModifyProfileWindow(QMainWindow):
         # Create Update or Cancel button based on modification conditional
         self.modifyButton_layout = QGridLayout()
         if self.isNew:
-            self.modify_button = QPushButton("Create")
-            self.modifyButton_layout.addWidget(self.modify_button)
+            if self.profilesExist == True:
+                self.modify_button = QPushButton("Update")
+                self.modifyButton_layout.addWidget(self.modify_button, 0, 1)
+                self.cancel_button = QPushButton("Cancel")
+                self.cancel_button.clicked.connect(self.closeModify)
+                self.modifyButton_layout.addWidget(self.cancel_button, 0, 0)
+            else:
+                self.modify_button = QPushButton("Create")
+                self.modifyButton_layout.addWidget(self.modify_button)
         else:
             self.modify_button = QPushButton("Update")
             self.modifyButton_layout.addWidget(self.modify_button, 0, 1)
